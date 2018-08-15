@@ -7,6 +7,7 @@ import (
 	"github.com/kawamuray/prometheus-exporter-harness/harness"
 	"io/ioutil"
 	"net/http"
+	"bytes"
 )
 
 type Collector struct {
@@ -63,7 +64,12 @@ func (col *Collector) fetchJson() ([]byte, error) {
 		return nil, fmt.Errorf("failed to read response body;err:<%s>", err)
 	}
 
-	return data, nil
+	return col.tidyJson(data), nil
+}
+
+func (col *Collector) tidyJson(b []byte) ([]byte) {
+	log.Infof("Replacing NaN with null")
+	return bytes.Replace(b, []byte(": NaN"), []byte(": null"), -1)
 }
 
 func (col *Collector) Collect(reg *harness.MetricRegistry) {
