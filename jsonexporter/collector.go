@@ -68,8 +68,6 @@ func (col *Collector) fetchJson() ([]byte, error) {
 }
 
 func (col *Collector) tidyJson(b []byte) ([]byte) {
-	log.Infof("Fixing invalid JSON")
-
 	b = bytes.Replace(b, []byte(": undefined"), []byte(": null"), -1)
 	b = bytes.Replace(b, []byte(": Infinity"), []byte(": null"), -1)
 	b = bytes.Replace(b, []byte(": -Infinity"), []byte(": null"), -1)
